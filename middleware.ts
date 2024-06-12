@@ -18,7 +18,7 @@ export function middleware(req: NextRequest) {
   if (!tenantName) {
     return NextResponse.json({ error: 'Invalid tenant' }, { status: 400 })
   }
-  // Render page with `app/[tenantName]/...`
-  const newPath = `/${tenantName}${req.nextUrl.pathname}`
-  return NextResponse.rewrite(new URL(newPath, req.url))
+  // Add a query string to request object
+  req.nextUrl.searchParams.set('tenantName', tenantName)
+  return NextResponse.rewrite(req.nextUrl)
 }
