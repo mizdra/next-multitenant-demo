@@ -14,17 +14,11 @@ function getTenantNameFromRequest(req: NextRequest): string | null {
 }
 
 export function middleware(req: NextRequest) {
-  // The query string added in the middleware takes precedence over the query string attached to the request URL.
-  // Therefore, the following line is not necessary.
-  if (req.nextUrl.searchParams.has('tenantName')) {
-    return NextResponse.json({ error: 'tenantName query string is not allowed' }, { status: 400 })
-  }
-
   const tenantName = getTenantNameFromRequest(req)
   if (!tenantName) {
     return NextResponse.json({ error: 'Invalid tenant' }, { status: 400 })
   }
-  // Add a query string to request object
-  req.nextUrl.searchParams.set('tenantName', tenantName)
-  return NextResponse.rewrite(req.nextUrl)
+  // Render page with `app/[tenantName]/...`
+  const newPath = `/${tenantName}${req.nextUrl.pathname}`
+  return NextResponse.rewrite(new URL(newPath, req.url))
 }
