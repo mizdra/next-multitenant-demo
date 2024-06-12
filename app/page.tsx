@@ -1,7 +1,10 @@
+import {ClientComponent} from '@/app/ClientComponent';
+
 export default function Home({ searchParams }: { searchParams: { tenantName: string } } ) {
   return (
     <main>
-      <h1>{searchParams.tenantName}</h1>
+      <h2>Server Component: {searchParams.tenantName}</h2>
+      <ClientComponent />
     </main>
   );
 }
